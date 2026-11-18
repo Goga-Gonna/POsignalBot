@@ -1,0 +1,76 @@
+import asyncio
+import logging
+
+from aiogram import Bot, Dispatcher
+
+from config import BOT_TOKEN
+from database import init_database
+from handlers.start import router as start_router
+from services.result_checker import (
+    start_result_checker,
+    stop_result_checker,
+)
+from services.collector import start_collector, stop_collector
+from market.pocket_option import close_pocket_options
+
+
+async def main():
+    # Инициализация базы данных
+    init_database()
+
+    # Telegram bot
+    bot = Bot(token=BOT_TOKEN)
+    dp = Dispatcher()
+
+    # Подключаем handlers
+    dp.include_router(start_router)
+
+    # Запускаем ResultChecker
+    await start_result_checker(bot)
+
+    # Запускаем сборщик свечей (только чтение и запись в market_data.db)
+    await start_collector()
+
+    print("================================")
+    print("PO Signal Bot запущен")
+    print("ResultChecker запущен")
+    print("================================")
+
+    try:
+        await dp.start_polling(bot)
+
+    finally:
+        print("Остановка PO Signal Bot...")
+
+        # Останавливаем ResultChecker
+        await stop_result_checker()
+
+        # Останавливаем сборщик свечей
+        await stop_collector()
+
+        # Закрываем DEMO и REAL Pocket Option клиенты
+        await close_pocket_options()
+
+        # Закрываем Telegram-сессию
+        await bot.session.close()
+
+        print("Все соединения закрыты")
+
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        handlers=[
+            logging.StreamHandler(),
+            logging.FileHandler(
+                "bot.log",
+                encoding="utf-8",
+            ),
+        ],
+    )
+
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\nPO Signal Bot остановлен пользователем")

@@ -1,0 +1,113 @@
+ДИАГНОСТИКА БИБЛИОТЕКИ И ПОТОКА СВЕЧЕЙ
+Запуск (UTC, часы компьютера): 2026-11-04 22:04:39
+
+=== 1. БИБЛИОТЕКА И ЕЁ МЕТОДЫ ===
+Версия BinaryOptionsToolsV2: 0.2.15
+Класс клиента: PocketOptionAsync
+
+active_assets() -> List[Dict]
+    Retrieves a list of all active assets.
+balance() -> float
+    Retrieves current account balance.
+buy(asset: str, amount: float, time: int, check_win: bool = False) -> Tuple[str, Dict]
+    Places a buy (call) order.
+cancel_pending_order(ticket: str) -> Dict
+    Cancels a pending order by its ticket identifier.
+cancel_pending_orders(tickets: List[str]) -> Dict
+    Cancels multiple pending orders in a single batch operation.
+candles(asset: str, period: int) -> List[Dict]
+    Retrieves historical candle data for an asset.
+check_win(id: str, timeout_seconds: Optional[int] = None) -> dict
+    Checks the result of a specific trade.
+clear_closed_deals() -> None
+    Removes all closed deals from the client's memory.
+closed_deals() -> List[str]
+    Retrieves a list of all closed/completed deals.
+compile_candles(asset: str, custom_period: int, lookback_period: int) -> List[Dict]
+    Compiles custom candlesticks from raw tick history.
+connect() -> None
+    Establishes a connection after a manual disconnect.
+create_raw_handler(validator: BinaryOptionsToolsV2.validator.Validator, keep_alive: Optional[str] = None) -> 'RawHandler'
+    Creates a raw handler for advanced WebSocket message handling.
+create_raw_iterator(message: str, validator: BinaryOptionsToolsV2.validator.Validator, timeout: Optional[datetime.timedelta] = None)
+    Creates an async iterator for streaming responses.
+create_raw_order(message: str, validator: BinaryOptionsToolsV2.validator.Validator) -> str
+    Sends a raw message and waits for a matching response.
+create_raw_order_with_timeout(message: str, validator: BinaryOptionsToolsV2.validator.Validator, timeout: datetime.timedelta) -> str
+    Sends a raw message and waits for a matching response with a custom timeout.
+create_raw_order_with_timeout_and_retry(message: str, validator: BinaryOptionsToolsV2.validator.Validator, timeout: datetime.timedelta) -> str
+    Sends a raw message with timeout and automatic retry logic.
+disconnect() -> None
+    Disconnects the client while keeping the configuration intact.
+get_candles(asset: str, period: int, offset: int) -> List[Dict]
+    Retrieves historical candle data for an asset.
+get_candles_advanced(asset: str, period: int, offset: int, time: int) -> List[Dict]
+    Retrieves historical candle data for an asset.
+get_candles_live(asset: str, period: int, hours: float = 2.0, max_rows: int = 100) -> AsyncGenerator[Tuple[List[Dict], Optional[Dict]], NoneType]
+    Fetches historical backfill and streams gap-free live candles.
+get_closed_deal(id: str) -> Optional[Dict]
+    Retrieves details of a specific closed deal by its ID.
+get_deal_end_time(trade_id: str) -> Optional[int]
+    Returns the expected close time of a deal as a Unix timestamp.
+get_opened_deal(id: str) -> Optional[Dict]
+    Retrieves details of a specific opened deal by its ID.
+get_pending_deals() -> List[Dict]
+    Retrieves a list of all pending orders.
+get_server_time() -> int
+    Retrieves the current server time from Pocket Option.
+get_ticks(asset: str, lookback_seconds: int) -> List[Tuple[int, float]]
+    Retrieves historical tick data for an asset.
+history(asset: str, period: int) -> List[Dict]
+    Retrieves historical price data for an asset.
+is_connected() -> bool
+    Checks if the client is currently connected to the WebSocket server.
+is_demo() -> bool
+    Checks if the current account is a demo account.
+is_ssid_valid() -> bool
+    Returns whether the SSID passed basic format validation during init.
+open_pending_order(open_type: int, amount: float, asset: str, open_time: Union[int, str], open_price: float, timeframe: int, min_payout: int, command: int) -> Dict
+    Opens a pending order on the PocketOption platform.
+opened_deals() -> List[str]
+    Retrieves a list of all currently open (active) deals.
+payout(asset: Union[str, List[str], NoneType] = None) -> Union[Dict[str, Optional[int]], List[Optional[int]], int, NoneType]
+    Retrieves current payout percentages for all assets.
+reconnect() -> None
+    Disconnects and reconnects the client.
+sell(asset: str, amount: float, time: int, check_win: bool = False) -> Tuple[str, Dict]
+    Places a sell (put) order.
+send_raw(message: str) -> None
+    Send a raw Engine.io/Socket.io message directly over the connection.
+send_raw_message(message: str) -> None
+    Sends a raw WebSocket message without waiting for a response.
+shutdown() -> None
+    Completely shuts down the client and its background runner.
+subscribe_raw() -> BinaryOptionsToolsV2.pocketoption.asynchronous.AsyncRawSubscription
+    Subscribe to all incoming WebSocket messages verbatim.
+subscribe_symbol(asset: str) -> BinaryOptionsToolsV2.pocketoption.asynchronous.AsyncSubscription
+    Subscribe to real-time raw price updates for an asset.
+subscribe_symbol_chunked(asset: str, chunk_size: int) -> BinaryOptionsToolsV2.pocketoption.asynchronous.AsyncSubscription
+    Subscribe with chunked candle aggregation (n raw ticks per candle).
+subscribe_symbol_time_aligned(asset: str, time: datetime.timedelta) -> BinaryOptionsToolsV2.pocketoption.asynchronous.AsyncSubscription
+    Subscribe with candles aligned to clock boundaries.
+subscribe_symbol_timed(asset: str, time: datetime.timedelta) -> BinaryOptionsToolsV2.pocketoption.asynchronous.AsyncSubscription
+    Subscribe with a fixed time-interval candle window.
+unsubscribe(asset: str) -> None
+    Unsubscribes from an asset's stream by asset name.
+wait_for_assets(timeout: float = 60.0) -> None
+    Waits for the assets to be loaded from the server.
+
+=== 2. ПОТОК СВЕЧЕЙ EURUSD, 1 мин: догоняет ли он реальное время ===
+обновление 1: сейчас 22:04:48 UTC | закрытых 200 | последняя закрытая 22:01:00 | формируемая 22:04:00 | возраст конца закрытой +168 сек.
+обновление 2: сейчас 22:04:48 UTC | закрытых 200 | последняя закрытая 22:01:00 | формируемая 22:04:00 | возраст конца закрытой +169 сек.
+обновление 3: сейчас 22:04:49 UTC | закрытых 200 | последняя закрытая 22:01:00 | формируемая 22:04:00 | возраст конца закрытой +170 сек.
+обновление 4: сейчас 22:04:50 UTC | закрытых 200 | последняя закрытая 22:01:00 | формируемая 22:04:00 | возраст конца закрытой +170 сек.
+обновление 5: сейчас 22:04:51 UTC | закрытых 200 | последняя закрытая 22:01:00 | формируемая 22:04:00 | возраст конца закрытой +172 сек.
+обновление 6: сейчас 22:04:52 UTC | закрытых 200 | последняя закрытая 22:01:00 | формируемая 22:04:00 | возраст конца закрытой +173 сек.
+
+=== 3. ГЛУБИНА ИСТОРИИ EURUSD, 1 мин, параметр hours (max_rows=2000) ===
+hours=1: получено 118 свечей, период 177 мин (ожидалось около 60), разрывов 1
+hours=3: получено 148 свечей, период 149 мин (ожидалось около 180), разрывов 1
+hours=6: получено 146 свечей, период 145 мин (ожидалось около 360), разрывов 0
+hours=12: получено 146 свечей, период 145 мин (ожидалось около 720), разрывов 0
+hours=24: получено 146 свечей, период 145 мин (ожидалось около 1440), разрывов 0
+
